@@ -1,19 +1,168 @@
-const donors=[{name:'Sunrise Bakery',food:'Bread & pastries',qty:36,need:'Any',expiry:1,location:'A'},{name:'Green Basket',food:'Produce boxes',qty:48,need:'Vegan',expiry:2,location:'B'},{name:'Corner Cafe',food:'Hot lunch bowls',qty:24,need:'Vegetarian',expiry:1,location:'C'},{name:'Harvest Kitchen',food:'Rice & lentils',qty:60,need:'Vegan',expiry:5,location:'D'},{name:'Daily Dairy',food:'Yogurt cups',qty:42,need:'Vegetarian',expiry:4,location:'E'},{name:'Pasta House',food:'Pasta trays',qty:76,need:'Any',expiry:7,location:'F'}];
-const hubs=[{name:'Northside Hub',demand:65,capacity:80,diet:['Any','Vegan','Vegetarian'],location:'N'},{name:'Eastside Pantry',demand:54,capacity:60,diet:['Vegan','Vegetarian'],location:'P'},{name:'Family Centre',demand:42,capacity:50,diet:['Any','Vegetarian'],location:'Q'},{name:'Youth Shelter',demand:33,capacity:40,diet:['Any','Vegan'],location:'Y'}];
-const points={A:[2.2,3.96],B:[6.28,2.52],C:[7.48,5.48],D:[3,7],E:[7,3],F:[4,4],N:[4.84,7.24],P:[7.84,2.52],Q:[3.32,5.48],Y:[6.36,7.16]};
-// A walkable grid of neighborhood junctions and short connector paths to each site.
-const pointsAll={...points};for(let x=1;x<=9;x+=2)for(let y=1;y<=9;y+=2)pointsAll[`J${x}_${y}`]=[x,y];
-const nodes=Object.keys(pointsAll), edges={};for(const n of nodes)edges[n]=[];
-function link(a,b){const A=pointsAll[a],B=pointsAll[b],w=Math.hypot(A[0]-B[0],A[1]-B[1]);edges[a].push([b,w]);edges[b].push([a,w])}
-for(let x=1;x<=9;x+=2)for(let y=1;y<=9;y+=2){if(x<9)link(`J${x}_${y}`,`J${x+2}_${y}`);if(y<9)link(`J${x}_${y}`,`J${x}_${y+2}`)}
-for(const site of Object.keys(points)){const near=nodes.filter(n=>n.startsWith('J')).map(n=>[n,Math.hypot(points[site][0]-pointsAll[n][0],points[site][1]-pointsAll[n][1])]).sort((a,b)=>a[1]-b[1]).slice(0,2);for(const [n,d] of near)link(site,n)}
-function astar(start,goal){const h=n=>Math.hypot(pointsAll[n][0]-pointsAll[goal][0],pointsAll[n][1]-pointsAll[goal][1]);let open=[start],g={[start]:0},came={};while(open.length){open.sort((a,b)=>(g[a]+h(a))-(g[b]+h(b)));const n=open.shift();if(n===goal){let path=[n];while(came[path[0]])path.unshift(came[path[0]]);return {distance:+g[n].toFixed(1),path}}for(const [v,w] of edges[n]){const tent=g[n]+w;if(tent<(g[v]??Infinity)){came[v]=n;g[v]=tent;if(!open.includes(v))open.push(v)}}}return {distance:99,path:[]}}
-// Fuzzy inference: triangular membership for expiry urgency, demand pressure and route proximity.
-function tri(x,a,b,c){return Math.max(0,Math.min((x-a)/(b-a||1),(c-x)/(c-b||1),1))}
-function fuzzy(d,h,dist){const clamp=x=>Math.max(0,Math.min(1,x)), expiryUrgency=clamp(1-d.expiry/8), demandPressure=tri(h.demand,0,65,100), proximity=clamp(1-dist/12);const urgent=Math.max(Math.min(expiryUrgency,demandPressure),Math.min(expiryUrgency,proximity)*.9,Math.min(demandPressure,proximity)*.55);return Math.round(100*urgent)}
-function bestPath(d,h){return astar(d.location,h.location)}
-// CSP backtracking: each donation goes to one compatible hub; capacity/demand bounds hold.
-function match(){const remaining=hubs.map(h=>({ ...h, used:0}));let ordered=[...donors].sort((a,b)=>a.expiry-b.expiry||b.qty-a.qty),assign=[];function bt(i){if(i===ordered.length)return true;const d=ordered[i], opts=remaining.filter(h=>h.diet.includes(d.need)&&h.used+d.qty<=h.capacity).map(h=>({h,...bestPath(d,h)})).sort((a,b)=>fuzzy(d,b.h,b.distance)-fuzzy(d,a.h,a.distance));for(const o of opts){o.h.used+=d.qty;assign.push({d,h:o.h,dist:o.distance,path:o.path,score:fuzzy(d,o.h,o.distance)});if(bt(i+1))return true;assign.pop();o.h.used-=d.qty}return bt(i+1)}bt(0);return assign.sort((a,b)=>b.score-a.score)}
-function drawRoutes(routes){const nodeName={A:'Sunrise Bakery',B:'Green Basket',C:'Corner Cafe',D:'Harvest Kitchen',E:'Daily Dairy',F:'Pasta House',N:'Northside Hub',P:'Eastside Pantry',Q:'Family Centre',Y:'Youth Shelter'};const xy=n=>{const [x,y]=pointsAll[n];return [(x-1)/8*720,(y-1)/8*390]};document.querySelector('#routePaths').innerHTML=routes.map((m,i)=>{const coords=m.path.map(xy),d=coords.map((p,j)=>`${j?'L':'M'}${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' ');return `<path class="route route${i+1}" d="${d}"/>`}).join('');document.querySelector('#routeSummary').innerHTML=routes.map((m,i)=>`<div><b>0${i+1}</b><span><strong>${m.d.name} → ${m.h.name}</strong><small>${m.dist} map units · ${m.d.qty} meals · urgency ${m.score}</small></span></div>`).join('')||'<p class="empty">No feasible handoffs for the current data.</p>'}
-function render(){document.querySelector('#donations').innerHTML=donors.map(d=>`<tr><td>${d.name}</td><td>${d.food}</td><td>${d.qty} meals</td><td><span class="diet">${d.need}</span></td><td class="${d.expiry<=2?'expiry':''}">${d.expiry}h</td><td><span class="status ${d.expiry<=2?'warn':''}">● ${d.expiry<=2?'URGENT':'AVAILABLE'}</span></td></tr>`).join('');const matches=match();document.querySelector('#matches').innerHTML=matches.slice(0,4).map((m,i)=>`<div class="match"><div class="match-num">0${i+1}</div><div><h3>${m.d.name} <span style="color:#9aa39c;font-weight:400">→</span> ${m.h.name}</h3><p>${m.d.qty} meals · ${m.dist} map units · ${m.d.need==='Any'?'All diets':m.d.need+' compatible'} · <span class="${m.d.expiry<=2?'expiry':''}">${m.d.expiry}h to expiry</span></p></div><div class="score"><b>${m.score}</b><small>urgency</small></div></div>`).join('');const total=matches.reduce((s,m)=>s+m.d.qty,0);document.querySelector('#stat-meals').textContent=total;document.querySelector('#stat-meals-note').textContent='of '+donors.reduce((s,d)=>s+d.qty,0)+' offered meals';document.querySelector('#stat-rate').innerHTML=Math.round(total/donors.reduce((s,d)=>s+d.qty,0)*100)+'<em>%</em>';document.querySelector('#stat-risk').textContent=donors.filter(d=>d.expiry<=2).reduce((s,d)=>s+d.qty,0);document.querySelector('#routes-count').innerHTML='<i></i> '+Math.min(3,matches.length)+' priority routes';drawRoutes(matches.slice(0,3));const meals=total,offers=matches.length;document.querySelector('#runStatus').textContent=`${offers} feasible handoffs · ${meals} meals assigned · updated ${new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'})}`;}
-document.querySelector('#run').onclick=()=>{const b=document.querySelector('#run');b.disabled=true;b.innerHTML='Updating matches…';requestAnimationFrame(()=>{render();b.disabled=false;b.innerHTML='Updated ✓';setTimeout(()=>b.innerHTML='Run matching <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5"/></svg>',1100)})};document.querySelector('#reset').onclick=()=>{location.href=location.pathname};document.querySelectorAll('.rail-icon').forEach(a=>a.addEventListener('click',()=>{document.querySelectorAll('.rail-icon').forEach(n=>{n.classList.remove('active');n.removeAttribute('aria-current')});a.classList.add('active');a.setAttribute('aria-current','location')}));render();
+const donors = [
+  { name: 'Sunrise Bakery', food: 'Bread & pastries', qty: 36, need: 'Any', expiry: 1, location: 'A' },
+  { name: 'Green Basket', food: 'Produce boxes', qty: 48, need: 'Vegan', expiry: 2, location: 'B' },
+  { name: 'Corner Cafe', food: 'Hot lunch bowls', qty: 24, need: 'Vegetarian', expiry: 1, location: 'C' },
+  { name: 'Harvest Kitchen', food: 'Rice & lentils', qty: 60, need: 'Vegan', expiry: 5, location: 'D' },
+  { name: 'Daily Dairy', food: 'Yogurt cups', qty: 42, need: 'Vegetarian', expiry: 4, location: 'E' },
+  { name: 'Pasta House', food: 'Pasta trays', qty: 76, need: 'Any', expiry: 7, location: 'F' }
+];
+const hubs = [
+  { name: 'Northside Hub', demand: 65, capacity: 80, diet: ['Any', 'Vegan', 'Vegetarian'], location: 'N' },
+  { name: 'Eastside Pantry', demand: 54, capacity: 60, diet: ['Vegan', 'Vegetarian'], location: 'P' },
+  { name: 'Family Centre', demand: 42, capacity: 50, diet: ['Any', 'Vegetarian'], location: 'Q' },
+  { name: 'Youth Shelter', demand: 33, capacity: 40, diet: ['Any', 'Vegan'], location: 'Y' }
+];
+const points = {
+  A: [2.2, 3.96], B: [6.28, 2.52], C: [7.48, 5.48], D: [3, 7], E: [7, 3], F: [4, 4],
+  N: [4.84, 7.24], P: [7.84, 2.52], Q: [3.32, 5.48], Y: [6.36, 7.16]
+};
+const pointsAll = { ...points };
+for (let x = 1; x <= 9; x += 2) for (let y = 1; y <= 9; y += 2) pointsAll[`J${x}_${y}`] = [x, y];
+const nodes = Object.keys(pointsAll);
+const edges = Object.fromEntries(nodes.map(n => [n, []]));
+
+function connect(a, b) {
+  const pa = pointsAll[a], pb = pointsAll[b];
+  const distance = Math.hypot(pa[0] - pb[0], pa[1] - pb[1]);
+  edges[a].push([b, distance]);
+  edges[b].push([a, distance]);
+}
+for (let x = 1; x <= 9; x += 2) {
+  for (let y = 1; y <= 9; y += 2) {
+    if (x < 9) connect(`J${x}_${y}`, `J${x + 2}_${y}`);
+    if (y < 9) connect(`J${x}_${y}`, `J${x}_${y + 2}`);
+  }
+}
+for (const site of Object.keys(points)) {
+  const nearest = nodes.filter(n => n.startsWith('J'))
+    .map(n => [n, Math.hypot(points[site][0] - pointsAll[n][0], points[site][1] - pointsAll[n][1])])
+    .sort((a, b) => a[1] - b[1]).slice(0, 2);
+  nearest.forEach(([junction]) => connect(site, junction));
+}
+
+function aStar(start, goal) {
+  const heuristic = n => Math.hypot(pointsAll[n][0] - pointsAll[goal][0], pointsAll[n][1] - pointsAll[goal][1]);
+  const open = [start], cost = { [start]: 0 }, previous = {};
+  while (open.length) {
+    open.sort((a, b) => cost[a] + heuristic(a) - cost[b] - heuristic(b));
+    const current = open.shift();
+    if (current === goal) {
+      const path = [current];
+      while (previous[path[0]]) path.unshift(previous[path[0]]);
+      return { distance: +cost[current].toFixed(1), path };
+    }
+    for (const [next, weight] of edges[current]) {
+      const nextCost = cost[current] + weight;
+      if (nextCost < (cost[next] ?? Infinity)) {
+        previous[next] = current;
+        cost[next] = nextCost;
+        if (!open.includes(next)) open.push(next);
+      }
+    }
+  }
+  return { distance: 99, path: [] };
+}
+
+function triangle(x, a, b, c) {
+  return Math.max(0, Math.min((x - a) / (b - a || 1), (c - x) / (c - b || 1), 1));
+}
+function urgency(offer, hub, distance) {
+  const clamp = x => Math.max(0, Math.min(1, x));
+  const expiry = clamp(1 - offer.expiry / 8);
+  const demand = triangle(hub.demand, 0, 65, 100);
+  const proximity = clamp(1 - distance / 12);
+  const score = Math.max(Math.min(expiry, demand), Math.min(expiry, proximity) * .9, Math.min(demand, proximity) * .55);
+  return Math.round(score * 100);
+}
+
+// CSP backtracking: one compatible hub per offer, with hub capacity as a hard limit.
+function findMatches() {
+  const available = hubs.map(hub => ({ ...hub, used: 0 }));
+  const ordered = [...donors].sort((a, b) => a.expiry - b.expiry || b.qty - a.qty);
+  const assignments = [];
+  function assign(index) {
+    if (index === ordered.length) return true;
+    const offer = ordered[index];
+    const candidates = available
+      .filter(hub => hub.diet.includes(offer.need) && hub.used + offer.qty <= hub.capacity)
+      .map(hub => ({ hub, ...aStar(offer.location, hub.location) }))
+      .sort((a, b) => urgency(offer, b.hub, b.distance) - urgency(offer, a.hub, a.distance));
+    for (const choice of candidates) {
+      choice.hub.used += offer.qty;
+      assignments.push({ offer, hub: choice.hub, distance: choice.distance, path: choice.path, score: urgency(offer, choice.hub, choice.distance) });
+      if (assign(index + 1)) return true;
+      assignments.pop();
+      choice.hub.used -= offer.qty;
+    }
+    return assign(index + 1);
+  }
+  assign(0);
+  return assignments.sort((a, b) => b.score - a.score);
+}
+
+function drawRoutes(matches) {
+  const xy = node => {
+    const [x, y] = pointsAll[node];
+    return [(x - 1) / 8 * 720, (y - 1) / 8 * 390];
+  };
+  document.querySelector('#routePaths').innerHTML = matches.map((match, i) => {
+    const coords = match.path.map(xy);
+    const d = coords.map((p, j) => `${j ? 'L' : 'M'}${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' ');
+    return `<path class="route route${i + 1}" d="${d}"/>`;
+  }).join('');
+  document.querySelector('#routeSummary').innerHTML = matches.length
+    ? matches.map((m, i) => `<div><b>0${i + 1}</b><span><strong>${m.offer.name} → ${m.hub.name}</strong><small>${m.distance} sample units · ${m.offer.qty} meals · priority ${m.score}/100</small></span></div>`).join('')
+    : '<p class="empty-state">Your suggested pickups will appear here.</p>';
+  document.querySelector('#routes-count').innerHTML = `<i></i> ${matches.length ? Math.min(3, matches.length) + ' suggested routes' : 'No routes yet'}`;
+}
+
+function renderMatches() {
+  const matches = findMatches();
+  const assigned = new Set(matches.map(match => match.offer.name));
+  document.querySelector('#matches').innerHTML = matches.length
+    ? matches.map((m, i) => `<div class="match"><div class="match-num">0${i + 1}</div><div><h3>${m.offer.name} → ${m.hub.name}</h3><p>${m.offer.qty} meals · ${m.offer.need === 'Any' ? 'Any diet' : m.offer.need} · expires in ${m.offer.expiry}h</p></div><div class="score"><b>${m.score}</b><small>priority / 100</small></div></div>`).join('')
+    : '<p class="empty-state">No offers fit the current hub rules and capacity.</p>';
+  document.querySelector('#donations').innerHTML = donors.map(offer => `<tr><td>${offer.name}</td><td>${offer.food}</td><td>${offer.qty} meals</td><td><span class="diet">${offer.need}</span></td><td class="${offer.expiry <= 2 ? 'expiry' : ''}">${offer.expiry}h</td><td><span class="status ${assigned.has(offer.name) ? 'matched' : 'unmatched'}">${assigned.has(offer.name) ? 'MATCHED' : 'NO MATCH'}</span></td></tr>`).join('');
+  const total = matches.reduce((sum, match) => sum + match.offer.qty, 0);
+  document.querySelector('#stat-rate').textContent = `${total} / ${donors.reduce((sum, offer) => sum + offer.qty, 0)}`;
+  document.querySelector('#stat-rate-note').textContent = `${Math.round(total / donors.reduce((sum, offer) => sum + offer.qty, 0) * 100)}% matched · ${matches.length} of 6 offers`;
+  document.querySelector('#runStatus').textContent = `${matches.length} offers matched · ${total} meals assigned · updated ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
+  drawRoutes(matches.slice(0, 3));
+  document.querySelector('#reset').disabled = false;
+}
+
+document.querySelector('#run').addEventListener('click', () => {
+  const button = document.querySelector('#run');
+  button.disabled = true;
+  button.querySelector('span').textContent = 'Finding matches…';
+  requestAnimationFrame(() => {
+    renderMatches();
+    button.disabled = false;
+    button.querySelector('span').textContent = 'Refresh matches';
+  });
+});
+document.querySelectorAll('.rail-icon').forEach(link => link.addEventListener('click', () => {
+  document.querySelectorAll('.rail-icon').forEach(item => { item.classList.remove('active'); item.removeAttribute('aria-current'); });
+  link.classList.add('active');
+  link.setAttribute('aria-current', 'location');
+}));
+document.querySelector('#reset').addEventListener('click', () => {
+  document.querySelector('#matches').innerHTML = '<p class="empty-state">No matches yet. Select <b>Find matches</b> to see which hubs can accept each offer.</p>';
+  document.querySelector('#runStatus').textContent = 'Start by checking the offers, then select Find matches.';
+  document.querySelector('#stat-rate').textContent = '—';
+  document.querySelector('#stat-rate-note').textContent = 'run the match process to calculate';
+  document.querySelector('#donations').innerHTML = donors.map(offer => `<tr><td>${offer.name}</td><td>${offer.food}</td><td>${offer.qty} meals</td><td><span class="diet">${offer.need}</span></td><td class="${offer.expiry <= 2 ? 'expiry' : ''}">${offer.expiry}h</td><td><span class="status pending">NOT MATCHED</span></td></tr>`).join('');
+  document.querySelector('#reset').disabled = true;
+  document.querySelector('#run').querySelector('span').textContent = 'Find matches';
+  document.querySelector('#routePaths').innerHTML = '';
+  document.querySelector('#routeSummary').innerHTML = '<p class="empty-state">Your suggested pickups will appear here.</p>';
+  document.querySelector('#routes-count').innerHTML = '<i></i> No routes yet';
+  history.replaceState(null, '', location.pathname);
+  document.querySelectorAll('.rail-icon').forEach(item => { item.classList.remove('active'); item.removeAttribute('aria-current'); });
+  const overviewLink = document.querySelector('.rail-icon[href="#overview"]');
+  overviewLink.classList.add('active');
+  overviewLink.setAttribute('aria-current', 'location');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+// The offers are visible on arrival; results appear only after the user starts matching.
+document.querySelector('#donations').innerHTML = donors.map(offer => `<tr><td>${offer.name}</td><td>${offer.food}</td><td>${offer.qty} meals</td><td><span class="diet">${offer.need}</span></td><td class="${offer.expiry <= 2 ? 'expiry' : ''}">${offer.expiry}h</td><td><span class="status pending">NOT MATCHED</span></td></tr>`).join('');

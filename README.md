@@ -9,7 +9,7 @@ cd rescuegrid
 python3 -m http.server 8000
 ```
 
-Open http://localhost:8000 and select **Run matching**. The application is static HTML, CSS, and JavaScript; no package installation or external AI service is needed. Sample offers, demand, capacities, and map locations are synthetic.
+Open http://localhost:8000 and select **Find matches**. The application is static HTML, CSS, and JavaScript; no package installation or external AI service is needed. Sample offers, demand, capacities, and map locations are synthetic.
 
 ## Project files
 
