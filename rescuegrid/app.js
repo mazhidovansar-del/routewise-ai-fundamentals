@@ -124,9 +124,7 @@ function renderMatches() {
     : '<p class="empty-state">No offers fit the current hub rules and capacity.</p>';
   document.querySelector('#donations').innerHTML = donors.map(offer => `<tr><td>${offer.name}</td><td>${offer.food}</td><td>${offer.qty} meals</td><td><span class="diet">${offer.need}</span></td><td class="${offer.expiry <= 2 ? 'expiry' : ''}">${offer.expiry}h</td><td><span class="status ${assigned.has(offer.name) ? 'matched' : 'unmatched'}">${assigned.has(offer.name) ? 'MATCHED' : 'NO MATCH'}</span></td></tr>`).join('');
   const total = matches.reduce((sum, match) => sum + match.offer.qty, 0);
-  document.querySelector('#stat-rate').textContent = `${total} / ${donors.reduce((sum, offer) => sum + offer.qty, 0)}`;
-  document.querySelector('#stat-rate-note').textContent = `${Math.round(total / donors.reduce((sum, offer) => sum + offer.qty, 0) * 100)}% matched · ${matches.length} of 6 offers`;
-  document.querySelector('#runStatus').textContent = `${matches.length} offers matched · ${total} meals assigned · updated ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
+  document.querySelector('#runStatus').textContent = `${matches.length} of 6 offers matched · ${total} of ${donors.reduce((sum, offer) => sum + offer.qty, 0)} meals placed · ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
   drawRoutes(matches.slice(0, 3));
   document.querySelector('#reset').disabled = false;
 }
@@ -137,32 +135,22 @@ document.querySelector('#run').addEventListener('click', () => {
   button.querySelector('span').textContent = 'Finding matches…';
   requestAnimationFrame(() => {
     renderMatches();
+    document.querySelector('#plan').hidden = false;
+    document.querySelector('#plan').scrollIntoView({ behavior: 'smooth', block: 'start' });
     button.disabled = false;
     button.querySelector('span').textContent = 'Refresh matches';
   });
 });
-document.querySelectorAll('.rail-icon').forEach(link => link.addEventListener('click', () => {
-  document.querySelectorAll('.rail-icon').forEach(item => { item.classList.remove('active'); item.removeAttribute('aria-current'); });
-  link.classList.add('active');
-  link.setAttribute('aria-current', 'location');
-}));
 document.querySelector('#reset').addEventListener('click', () => {
-  document.querySelector('#matches').innerHTML = '<p class="empty-state">No matches yet. Select <b>Find matches</b> to see which hubs can accept each offer.</p>';
-  document.querySelector('#runStatus').textContent = 'Start by checking the offers, then select Find matches.';
-  document.querySelector('#stat-rate').textContent = '—';
-  document.querySelector('#stat-rate-note').textContent = 'run the match process to calculate';
-  document.querySelector('#donations').innerHTML = donors.map(offer => `<tr><td>${offer.name}</td><td>${offer.food}</td><td>${offer.qty} meals</td><td><span class="diet">${offer.need}</span></td><td class="${offer.expiry <= 2 ? 'expiry' : ''}">${offer.expiry}h</td><td><span class="status pending">NOT MATCHED</span></td></tr>`).join('');
+  document.querySelector('#plan').hidden = true;
+  document.querySelector('#donations').innerHTML = donors.map(offer => `<tr><td>${offer.name}</td><td>${offer.food}</td><td>${offer.qty} meals</td><td><span class="diet">${offer.need}</span></td><td class="${offer.expiry <= 2 ? 'expiry' : ''}">${offer.expiry}h</td><td><span class="status pending">PENDING</span></td></tr>`).join('');
   document.querySelector('#reset').disabled = true;
   document.querySelector('#run').querySelector('span').textContent = 'Find matches';
   document.querySelector('#routePaths').innerHTML = '';
   document.querySelector('#routeSummary').innerHTML = '<p class="empty-state">Your suggested pickups will appear here.</p>';
   document.querySelector('#routes-count').innerHTML = '<i></i> No routes yet';
-  history.replaceState(null, '', location.pathname);
-  document.querySelectorAll('.rail-icon').forEach(item => { item.classList.remove('active'); item.removeAttribute('aria-current'); });
-  const overviewLink = document.querySelector('.rail-icon[href="#overview"]');
-  overviewLink.classList.add('active');
-  overviewLink.setAttribute('aria-current', 'location');
+
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 // The offers are visible on arrival; results appear only after the user starts matching.
-document.querySelector('#donations').innerHTML = donors.map(offer => `<tr><td>${offer.name}</td><td>${offer.food}</td><td>${offer.qty} meals</td><td><span class="diet">${offer.need}</span></td><td class="${offer.expiry <= 2 ? 'expiry' : ''}">${offer.expiry}h</td><td><span class="status pending">NOT MATCHED</span></td></tr>`).join('');
+document.querySelector('#donations').innerHTML = donors.map(offer => `<tr><td>${offer.name}</td><td>${offer.food}</td><td>${offer.qty} meals</td><td><span class="diet">${offer.need}</span></td><td class="${offer.expiry <= 2 ? 'expiry' : ''}">${offer.expiry}h</td><td><span class="status pending">PENDING</span></td></tr>`).join('');
