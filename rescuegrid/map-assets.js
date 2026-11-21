@@ -1,0 +1,2 @@
+const roadLayer=document.querySelector('.asset-roads');
+roadLayer.innerHTML=[20,40,60,80].map(x=>`<span class="map-road vertical" style="left:${x}%"></span>`).join('')+[33.333,66.666].map(y=>`<span class="map-road horizontal" style="top:${y}%"></span>`).join('')+[20,40,60,80].flatMap(x=>[33.333,66.666].map(y=>`<img class="intersection-art" src="assets/intersection-core.png" alt="" style="left:${x}%;top:${y}%">`)).join('');
