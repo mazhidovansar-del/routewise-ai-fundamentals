@@ -1,8 +1,8 @@
 # Team Contribution Statement
 
-**Project:** RescueGrid — AI-assisted community food rescue
+**Project:** RouteWise — courier order and route planner
 
-Use this statement to report actual contributions. Replace the placeholders with the names of the participating student(s) and adjust the contribution descriptions before submission.
+Replace the placeholders with the names of participating students and adjust contributions to reflect the actual work completed.
 
 | Team member | Contributions |
 |---|---|
