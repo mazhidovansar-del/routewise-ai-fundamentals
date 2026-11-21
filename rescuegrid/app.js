@@ -1,7 +1,7 @@
 const places = [
-  {id:'B1',name:'Abai Ave 3',mapLabel:'Abai 3',x:10,y:17},{id:'B2',name:'Abai Ave 8',mapLabel:'Abai 8',x:30,y:17},{id:'B3',name:'Abai Ave 12',mapLabel:'Abai 12',x:50,y:17},{id:'B4',name:'Abai Ave 17',mapLabel:'Abai 17',x:70,y:17},{id:'B5',name:'Abai Ave 24',mapLabel:'Abai 24',x:90,y:17},
+  {id:'B1',name:'Abai Ave 3',mapLabel:'Abai 3',x:10,y:16.667},{id:'B2',name:'Abai Ave 8',mapLabel:'Abai 8',x:30,y:16.667},{id:'B3',name:'Abai Ave 12',mapLabel:'Abai 12',x:50,y:16.667},{id:'B4',name:'Abai Ave 17',mapLabel:'Abai 17',x:70,y:16.667},{id:'B5',name:'Abai Ave 24',mapLabel:'Abai 24',x:90,y:16.667},
   {id:'B6',name:'Kabanbay Batyr St 5',mapLabel:'Kabanbay 5',x:10,y:50},{id:'B7',name:'Kabanbay Batyr St 11',mapLabel:'Kabanbay 11',x:30,y:50},{id:'B8',name:'Kabanbay Batyr St 16',mapLabel:'Kabanbay 16',x:50,y:50},{id:'B9',name:'Kabanbay Batyr St 22',mapLabel:'Kabanbay 22',x:70,y:50},{id:'B10',name:'Kabanbay Batyr St 29',mapLabel:'Kabanbay 29',x:90,y:50},
-  {id:'B11',name:'Dostyk St 4',mapLabel:'Dostyk 4',x:10,y:83},{id:'B12',name:'Dostyk St 9',mapLabel:'Dostyk 9',x:30,y:83},{id:'B13',name:'Dostyk St 15',mapLabel:'Dostyk 15',x:50,y:83},{id:'B14',name:'Dostyk St 21',mapLabel:'Dostyk 21',x:70,y:83},{id:'B15',name:'Dostyk St 30',mapLabel:'Dostyk 30',x:90,y:83}
+  {id:'B11',name:'Dostyk St 4',mapLabel:'Dostyk 4',x:10,y:83.333},{id:'B12',name:'Dostyk St 9',mapLabel:'Dostyk 9',x:30,y:83.333},{id:'B13',name:'Dostyk St 15',mapLabel:'Dostyk 15',x:50,y:83.333},{id:'B14',name:'Dostyk St 21',mapLabel:'Dostyk 21',x:70,y:83.333},{id:'B15',name:'Dostyk St 30',mapLabel:'Dostyk 30',x:90,y:83.333}
 ];
 let courier = 'B8';
 let orders = [
