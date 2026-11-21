@@ -9,7 +9,7 @@ cd rescuegrid
 python3 -m http.server 8000
 ```
 
-Open http://localhost:8000. Choose a starting building, set restaurant/customer buildings and time until each order is ready, then select **Plan my route**. Click a building on the map to assign the currently selected location. Cooking timers count down from the start of the route plan. The fixed map and times are synthetic; no network or package installation is needed.
+Open http://localhost:8000. Choose a starting building, set restaurant/customer buildings and time until each order is ready, then select **Plan my route**. Click a building on the map to assign the currently selected location. Cooking timers count down from the start of the route plan. The fixed map and times are synthetic; no network or package installation is needed. The initial sample plan estimates about 31 minutes less than a nearest-first baseline, on this dataset only.
 
 ## Algorithms
 
@@ -20,9 +20,9 @@ Open http://localhost:8000. Choose a starting building, set restaurant/customer 
 
 ## Submission files
 
-- `RescueGrid_Technical_Report.docx` — project, algorithms, implementation, evaluation, and limitations
-- `RescueGrid_Presentation.pptx` — six-slide project presentation
-- `RescueGrid_Demo.mp4` — narrated demo
+- `RouteWise_Technical_Report.docx` — project, algorithms, implementation, evaluation, and limitations
+- `RouteWise_Presentation.pptx` — six-slide project presentation
+- `RouteWise_Demo.mp4` — narrated demo
 - `AI_Usage_Declaration.md` — AI use statement; review before submission
 - `Team_Contribution_Statement.md` — replace placeholders with actual team contributions
 
