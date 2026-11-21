@@ -32,10 +32,42 @@
 .city-map .map-road{
   position:absolute;
   width:100%;
-  height:20%;
-  object-fit:fill;
-  user-select:none;
+  height:7cqw;
   z-index:1;
+}
+.city-map .map-sidewalk{
+  position:absolute;
+  left:0;
+  right:0;
+  height:1.12cqw;
+  background-image:url("assets/road-sidewalk-strip.png");
+  background-size:19.5cqw 1.12cqw;
+  background-position:center;
+  background-repeat:repeat-x;
+}
+.city-map .map-sidewalk.top{top:0}
+.city-map .map-sidewalk.bottom{bottom:0}
+.city-map .road-surface{
+  position:absolute;
+  top:1.12cqw;
+  right:0;
+  bottom:1.12cqw;
+  left:0;
+  overflow:hidden;
+  background-color:#4c4e50;
+  background-image:url("assets/road-asphalt-texture.png");
+  background-size:4.76cqw 4.76cqw;
+  background-repeat:repeat;
+}
+.city-map .road-surface:after{
+  content:"";
+  position:absolute;
+  top:50%;
+  left:0;
+  right:0;
+  height:.24cqw;
+  transform:translateY(-50%);
+  background-image:repeating-linear-gradient(to right,#e7ddc5 0 2.4cqw,transparent 2.4cqw 5.2cqw);
 }
 .city-map .map-road.horizontal{
   left:0;
@@ -48,8 +80,8 @@
 .city-map .intersection-art{
   position:absolute;
   z-index:2;
-  width:10%;
-  height:16%;
+  width:7%;
+  height:11.2%;
   object-fit:fill;
   transform:translate(-50%,-50%);
   user-select:none;
@@ -104,4 +136,5 @@
 }
 .city-map .sequence-marker{position:absolute;z-index:2;right:-6px;top:-6px}
 .city-map .map-caption{display:none}
-.night .asset-roads img{filter:brightness(.76) drop-shadow(0 1px 2px #0008)}
+.night .asset-roads .map-road,
+.night .asset-roads .intersection-art{filter:brightness(.76) drop-shadow(0 1px 2px #0008)}
