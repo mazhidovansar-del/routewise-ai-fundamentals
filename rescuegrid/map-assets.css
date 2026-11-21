@@ -1,12 +1,107 @@
-.city-map{overflow:hidden;background:#a9c99b}.roads{z-index:0}.roads .road-edges,.roads .roads-lines,.roads .road-markings,.roads .traffic-lights{display:none}.asset-roads{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}.map-road{position:absolute;z-index:1;background-color:#4d5351;box-shadow:inset 0 0 0 5px #c9b99b}.map-road.vertical{top:0;bottom:0;width:6.5%;transform:translateX(-50%);background-image:repeating-linear-gradient(to bottom,transparent 0 20px,#eee7d7 20px 32px,transparent 32px 52px),linear-gradient(to right,#cbb996 0 5%,#4d5351 5% 95%,#cbb996 95%)}.map-road.horizontal{left:0;right:0;height:11%;transform:translateY(-50%);background-image:repeating-linear-gradient(to right,transparent 0 20px,#eee7d7 20px 32px,transparent 32px 52px),linear-gradient(to bottom,#cbb996 0 9%,#4d5351 9% 91%,#cbb996 91%)}.intersection-art{position:absolute;z-index:2;width:9%;height:19%;transform:translate(-50%,-50%);object-fit:fill;filter:drop-shadow(0 1px 2px #26352d44)}.route-overlay{position:absolute;inset:0;width:100%;height:100%;z-index:3;overflow:visible;pointer-events:none}.route-line{stroke:#f27652;stroke-width:6;stroke-dasharray:10 6;filter:drop-shadow(0 1px 2px #333)}#buildings{z-index:4}.building{width:16%;height:29%;padding:3px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:0;overflow:visible;background:#a9c99b!important;border:2px solid #628759!important;border-radius:5px!important;box-shadow:inset 0 0 0 2px #bed7ab,0 2px 5px #34493455!important;color:#29372f;font-size:11px;line-height:1.15}.garden-bed{position:absolute;inset:3px;border-radius:2px;background:linear-gradient(135deg,#a9c99b,#92b984);z-index:-1}.building-art{width:88%;height:calc(100% - 23px);object-fit:contain;display:block;transition:transform .18s ease,filter .18s ease;filter:drop-shadow(0 2px 2px #20352d48)}.building-residential .building-art{width:77%;height:calc(100% - 27px)}.building-office .building-art{width:90%;height:calc(100% - 23px)}.building:hover .building-art{transform:translateY(-2px) scale(1.03)}.building-address{position:relative;bottom:auto;max-width:100%;padding:2px 5px;border:1px solid #597d51;border-radius:4px;background:#f5f3e7;white-space:nowrap;box-shadow:0 1px 3px #20352d25;overflow:hidden;text-overflow:ellipsis}.building.is-restaurant .building-art{filter:drop-shadow(0 0 3px #f29640) drop-shadow(0 2px 2px #20352d40)}.building.is-customer .building-art{filter:drop-shadow(0 0 3px #648fe8) drop-shadow(0 2px 2px #20352d40)}.building.is-courier .building-art{filter:drop-shadow(0 0 4px #167754) drop-shadow(0 2px 2px #20352d40)}.building.active-target:after{content:"";position:absolute;inset:-3px;border:3px solid #2776e8;border-radius:7px;pointer-events:none}.building .sequence-marker{z-index:2;right:-4px;top:-4px}.night .asset-roads img{filter:brightness(.73) drop-shadow(0 2px 2px #0008)}.night .building-address{background:#1f302b;color:#edf5ed;border-color:#53645a}
-@media(max-width:560px){.map-road.vertical{width:7%}.map-road.horizontal{height:12%}.intersection-art{width:10%;height:20%}.building{width:17%;height:29%;font-size:9px}.building-art{width:88%;height:calc(100% - 20px)}.building-residential .building-art{width:78%;height:calc(100% - 23px)}.building-address{padding:2px;font-size:8px}}
-/* Compact uniform plots, sized to the largest rendered building */
-.building{width:14%;height:24%;padding:2px;border-width:1px!important;border-radius:3px!important;box-shadow:inset 0 0 0 1px #bed7ab,0 1px 3px #34493444!important}.building-art{width:88%;height:calc(100% - 19px)}.building-residential .building-art{width:78%;height:calc(100% - 21px)}.building-address{font-size:10px;padding:1px 4px}.garden-bed{inset:2px}
-@media(max-width:560px){.building{width:15%;height:24%;padding:1px}.building-art{height:calc(100% - 16px)}.building-residential .building-art{height:calc(100% - 18px)}.building-address{font-size:8px}}
-/* The plot is now just the footprint of the largest building. */
-.building{width:12%;height:21%;padding:0;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:visible}.garden-bed{inset:3px;background:#9fca91;border:1px solid #74a66d;border-radius:3px;box-shadow:inset 0 0 0 2px #b9d8a8,0 1px 3px #34493444}.building-art{width:100%;height:100%;object-fit:contain;position:relative;z-index:1;filter:drop-shadow(0 2px 2px #20352d50)}.building-residential .building-art,.building-office .building-art{width:100%;height:100%}.building-address{display:none}.building.active-target:after{inset:1px;border-radius:4px}.building .sequence-marker{right:-5px;top:-5px}
-@media(max-width:560px){.building{width:13%;height:21%;padding:0}.building-art,.building-residential .building-art,.building-office .building-art{width:100%;height:100%}.garden-bed{inset:2px}.building-address{display:none}}
-.building{width:12%;height:18%;border-radius:0!important}.garden-bed{inset:0;border-radius:0;box-shadow:none}.building.active-target:after{inset:0;border-radius:0}.building-art{width:100%;height:100%;object-fit:contain}.building.is-restaurant .building-art,.building.is-customer .building-art,.building.is-courier .building-art{filter:drop-shadow(0 2px 3px #20352d55)}
-@media(max-width:560px){.building{width:13%;height:18%}.garden-bed{inset:0}}
-.city-map{position:relative;width:100%;height:auto;aspect-ratio:8/5;max-height:none;isolation:isolate;container-type:inline-size}.city-map .roads,.city-map .route-overlay{position:absolute;inset:0;width:100%;height:100%;display:block}.city-map #buildings{position:absolute;inset:0;display:block}.city-map .asset-roads{position:absolute;inset:0}.city-map .map-road{position:absolute;background-color:#4d5351;box-shadow:none;z-index:1}.city-map .map-road.vertical{top:0;bottom:0;width:4.4%;transform:translateX(-50%);background-image:repeating-linear-gradient(to bottom,transparent 0 2cqw,#eee7d7 2cqw 3.1cqw,transparent 3.1cqw 5.2cqw),linear-gradient(to right,#cbb996 0 5%,#4d5351 5% 95%,#cbb996 95%)}.city-map .map-road.horizontal{left:0;right:0;height:7.4%;transform:translateY(-50%);background-image:repeating-linear-gradient(to right,transparent 0 2cqw,#eee7d7 2cqw 3.1cqw,transparent 3.1cqw 5.2cqw),linear-gradient(to bottom,#cbb996 0 9%,#4d5351 9% 91%,#cbb996 91%)}.city-map .intersection-art{position:absolute;width:7.5%;height:12%;transform:translate(-50%,-50%);object-fit:fill;z-index:2}.city-map .building{position:absolute;left:var(--map-x);top:var(--map-y);width:10%;height:16%;padding:0;display:block;transform:translate(-50%,-50%);background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible}.city-map .garden-bed{position:absolute;inset:0;background:#9fca91;border:1px solid #74a66d;border-radius:2px;box-shadow:inset 0 0 0 1px #b9d8a8,0 1px 2px #34493444;z-index:0}.city-map .building-art{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:100%;height:100%;object-fit:contain;z-index:1}.city-map .building:hover .building-art{transform:translate(-50%,-53%) scale(1.04)}.city-map .building-address{display:none}.city-map .building.active-target:after{inset:-1px;border:2px solid #2776e8;border-radius:2px}.city-map .sequence-marker{right:-6px;top:-6px}
-@media(max-width:560px){.city-map .map-road.vertical{width:4.8%}.city-map .map-road.horizontal{height:8%}.city-map .intersection-art{width:8%;height:13%}.city-map .building{width:10%;height:16%}}
+.city-map{
+  position:relative;
+  width:100%;
+  height:auto;
+  aspect-ratio:8 / 5;
+  max-height:none;
+  overflow:hidden;
+  isolation:isolate;
+  container-type:inline-size;
+  background:#d9e5d2;
+}
+.city-map .roads,
+.city-map .route-overlay{
+  position:absolute;
+  inset:0;
+  display:block;
+  width:100%;
+  height:100%;
+}
+.city-map .roads{z-index:0}
+.city-map .roads .road-edges,
+.city-map .roads .roads-lines,
+.city-map .roads .road-markings,
+.city-map .roads .traffic-lights{display:none}
+.city-map .asset-roads{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  overflow:hidden;
+  pointer-events:none;
+}
+.city-map .map-road{
+  position:absolute;
+  width:100%;
+  height:20%;
+  object-fit:fill;
+  user-select:none;
+  z-index:1;
+}
+.city-map .map-road.horizontal{
+  left:0;
+  transform:translateY(-50%);
+}
+.city-map .map-road.vertical{
+  top:50%;
+  transform:translate(-50%,-50%) rotate(90deg);
+}
+.city-map .intersection-art{
+  position:absolute;
+  z-index:2;
+  width:10%;
+  height:16%;
+  object-fit:fill;
+  transform:translate(-50%,-50%);
+  user-select:none;
+}
+.city-map .route-overlay{z-index:3;overflow:visible;pointer-events:none}
+.city-map #buildings{position:absolute;inset:0;z-index:4}
+.city-map .building{
+  position:absolute;
+  left:var(--map-x,50%);
+  top:var(--map-y,50%);
+  width:10%;
+  height:16%;
+  padding:0;
+  display:block;
+  transform:translate(-50%,-50%);
+  overflow:visible;
+  border:0!important;
+  border-radius:2px!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.city-map .garden-bed{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  border:1px solid #74a66d;
+  border-radius:2px;
+  background:#9fca91;
+  box-shadow:inset 0 0 0 1px #b9d8a8,0 1px 2px #34493444;
+}
+.city-map .building-art{
+  position:absolute;
+  z-index:1;
+  left:50%;
+  top:50%;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  transform:translate(-50%,-50%);
+  filter:drop-shadow(0 2px 3px #20352d55);
+  transition:transform .18s ease;
+}
+.city-map .building:hover .building-art{transform:translate(-50%,-53%) scale(1.04)}
+.city-map .building-address{display:none}
+.city-map .building.active-target:after{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  border:2px solid #2776e8;
+  border-radius:2px;
+  pointer-events:none;
+}
+.city-map .sequence-marker{position:absolute;z-index:2;right:-6px;top:-6px}
+.city-map .map-caption{display:none}
+.night .asset-roads img{filter:brightness(.76) drop-shadow(0 1px 2px #0008)}
