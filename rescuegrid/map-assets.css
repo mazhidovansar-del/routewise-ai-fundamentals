@@ -145,3 +145,22 @@
 .city-map .map-caption{display:none}
 .night .asset-roads .map-road,
 .night .asset-roads .intersection-art{filter:brightness(.76) drop-shadow(0 1px 2px #0008)}
+
+/* Full street address appears on pointer hover and keyboard focus. */
+.city-map .building-address{display:block;position:absolute;left:50%;bottom:calc(100% + 9px);z-index:8;width:max-content;max-width:190px;padding:7px 10px;border-radius:6px;background:#1e302a;color:#fff;font:600 12px/1.25 'IBM Plex Sans',Arial,sans-serif;box-shadow:0 4px 12px #10241b44;opacity:0;visibility:hidden;transform:translate(-50%,4px);transition:opacity .15s,transform .15s,visibility .15s;pointer-events:none}
+.city-map .building-address:after{content:"";position:absolute;left:50%;top:100%;border:5px solid transparent;border-top-color:#1e302a;transform:translateX(-50%)}
+.city-map .building:hover .building-address,.city-map .building:focus-visible .building-address{opacity:1;visibility:visible;transform:translate(-50%,0)}
+.night .city-map .building-address{background:#edf4ed;color:#1e302a}
+.night .city-map .building-address:after{border-top-color:#edf4ed}
+
+/* Compact prep-time slider with a live time badge. */
+.prep{display:grid;align-content:center;gap:8px;min-width:0;padding:9px 10px;border:1px solid var(--line);border-radius:6px;background:linear-gradient(145deg,#f5f8f3,#fff)}
+.prep-label,.prep-scale{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.prep-label{font-size:11px;color:var(--muted)}
+.prep-label output{padding:4px 8px;border-radius:999px;background:#e2f1e6;color:#176d50;font-size:12px;font-weight:700;white-space:nowrap}
+.prep-range{width:100%;height:7px;margin:2px 0;appearance:none;border:0!important;border-radius:99px;padding:0!important;min-height:7px!important;background:linear-gradient(90deg,#176d50,#7ebf83)!important;cursor:pointer}
+.prep-range::-webkit-slider-thumb{appearance:none;width:18px;height:18px;border:3px solid #fff;border-radius:50%;background:#176d50;box-shadow:0 1px 5px #173e2c66}
+.prep-range::-moz-range-thumb{width:13px;height:13px;border:3px solid #fff;border-radius:50%;background:#176d50;box-shadow:0 1px 5px #173e2c66}
+.prep-scale{font-size:10px;color:var(--muted)}
+.night .prep{background:#203238;border-color:#496057}
+.night .prep-label output{background:#294c3c;color:#c7f0d1}
