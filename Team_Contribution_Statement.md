@@ -1,14 +1,14 @@
 # Team Contribution Statement
 
-**Project:** RouteWise — courier order and route planner
+**Project:** RouteWise — courier pickup and delivery route planner
 
-Replace the placeholders with the names of participating students and adjust contributions to reflect the actual work completed.
+Complete this statement with the actual participant names and contributions before submission. The repository history and project files can help verify implementation work, but they do not establish who completed each academic task or who is a member of the submitting team.
 
-| Team member | Contributions |
+| Team member | Contribution to confirm |
 |---|---|
-| [Student name] | Problem framing; algorithm selection and explanation; prototype review; demo and oral defense. |
-| [Add member, if applicable] | [Describe actual work completed.] |
-| [Add member, if applicable] | [Describe actual work completed.] |
-| [Add member, if applicable] | [Describe actual work completed.] |
+| [Student name] | [Describe work actually completed: project framing, algorithm design or implementation, UI, evaluation, report, presentation, or demo.] |
+| [Student name, if applicable] | [Describe work actually completed.] |
+| [Student name, if applicable] | [Describe work actually completed.] |
+| [Student name, if applicable] | [Describe work actually completed.] |
 
-All listed members should be prepared to explain the integrated workflow and their individual contributions. Do not claim work that a team member did not perform.
+Each named member should be able to explain how A* search, constraint satisfaction with backtracking, and simulated annealing work together in the application. Keep this statement consistent with actual team membership and work; remove unused rows.

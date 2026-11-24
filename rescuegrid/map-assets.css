@@ -164,3 +164,6 @@
 .prep-scale{font-size:10px;color:var(--muted)}
 .night .prep{background:#203238;border-color:#496057}
 .night .prep-label output{background:#294c3c;color:#c7f0d1}
+#routeLines .courier-runner{pointer-events:none;filter:drop-shadow(0 2px 3px #172c2488)}
+#routeLines .courier-runner circle{fill:#fff;stroke:#176d50;stroke-width:2}
+@media(prefers-reduced-motion:reduce){#routeLines .courier-runner animateMotion{display:none}}
