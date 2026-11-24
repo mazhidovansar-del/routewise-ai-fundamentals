@@ -22,6 +22,7 @@
 .city-map .roads .roads-lines,
 .city-map .roads .road-markings,
 .city-map .roads .traffic-lights{display:none}
+.map-legend .legend-route{width:16px;height:3px;border-radius:2px;background:#ef7040}
 .city-map .asset-roads{
   position:absolute;
   inset:0;
@@ -87,6 +88,12 @@
   user-select:none;
 }
 .city-map .route-overlay{z-index:3;overflow:visible;pointer-events:none}
+#routeLines .route-casings polyline,
+#routeLines .route-access-casings polyline{fill:none;stroke:#fff8e7;stroke-linecap:round;stroke-linejoin:round;opacity:.94}
+#routeLines .route-casings polyline{stroke-width:8}
+#routeLines .route-strokes polyline{fill:none;stroke:#ef7040;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 2px #32251c88)}
+#routeLines .route-access-casings polyline{stroke-width:6}
+#routeLines .route-access-strokes polyline{fill:none;stroke:#ef7040;stroke-width:2.5;stroke-dasharray:4 4;stroke-linecap:round;stroke-linejoin:round}
 .city-map #buildings{position:absolute;inset:0;z-index:4}
 .city-map .building{
   position:absolute;
