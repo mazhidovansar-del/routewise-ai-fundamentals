@@ -42,7 +42,7 @@ For each order in a proposed sequence, the planner estimates travel from the cou
 - `TECHNICAL_REPORT.md` — final technical report and evaluation notes
 - `RouteWise_Presentation.pptx` — six-slide project presentation
 - `AI_Usage_Declaration.md` — AI use disclosure
-- `Team_Contribution_Statement.md` — contribution record template; fill in names and verify actual work
+- `Team_Contribution_Statement.md` — contribution statement for the one-student team
 - `RouteWise_Technical_Report.docx` — Word report version
 - `RouteWise_Demo.mp4` — 2 minute 29 second walkthrough
 
@@ -56,4 +56,4 @@ For each order in a proposed sequence, the planner estimates travel from the cou
 - AI usage declaration: `AI_Usage_Declaration.md`
 - Team contribution statement: `Team_Contribution_Statement.md`
 
-The contribution statement intentionally leaves participant names for the team to confirm. Do not submit unverified names or claims.
+The contribution statement records a one-student team. Review it for accuracy before submission.
